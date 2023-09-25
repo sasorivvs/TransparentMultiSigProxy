@@ -1,4 +1,4 @@
-# Sample Hardhat Project
+# Transparent MultiSig Proxy
 
 This project demonstrates a basic Transparent proxy with multisig implementation of ProxyAdmin contract
 
@@ -9,7 +9,18 @@ After that cd into the base directory of the project and run `npm install` to do
 
 ## 1. Add your deployer key and API to as an environment variable for the project
 
-Add your deployer key and API to hardhat.config.ts
+Create an empty `config.ts` file in the base directory of this project.
+Add the following line to the `config.ts` file replacing `URL` with your api key:
+
+URL =your network url;
+ACCOUNT_DEPLOYER = your deployer private key;
+export { ACCOUNT_DEPLOYER, API };
+
+## 2. Edit owners.ts file
+Add the following lines to the `owners.ts` file replacing `OWNERS` with your owners of your MultiSig wallet contract and `required`
+with the required number of signatures to accept the transaction:
+const OWNERS = [];
+const required = ;
 
 ## 3. Compile the contract
 
