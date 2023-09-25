@@ -1,6 +1,8 @@
 import { Proxy } from "../typechain-types";
 import { loadFixture, ethers, expect } from "./setup";
+import { BoxV1__factory } from "../typechain-types/factories/BoxV1__factory";
 const FIRST_ADDRESS = "0x0000000000000000000000000000000000000001";
+const SECOND_ADDRESS = "0x0000000000000000000000000000000000000002";
 
 describe("Proxy", function () {
 	async function deploy() {
@@ -71,5 +73,16 @@ describe("Proxy", function () {
 
 		expect(await proxy.balances(user2.address)).to.be.eq(60);
 		expect(await proxy.balances(user1.address)).to.be.eq(40);
+	});
+
+	it("should delegate if it is not an admin", async function () {
+		const { user1, user2, proxy, boxV1 } = await loadFixture(deploy);
+		await proxy.connect(user1).upgradeImplementation(boxV1.target);
+
+		const proxyAddress = await proxy.target;
+		const proxyAdm = BoxV1__factory.connect(proxyAddress, user2);
+
+		expect(await proxyAdm.admin()).to.be.eq(FIRST_ADDRESS);
+		expect(await proxyAdm.implementation()).to.be.eq(SECOND_ADDRESS);
 	});
 });
